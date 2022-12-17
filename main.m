@@ -78,10 +78,19 @@ writematrix(dss, 'int/dss.csv')
 sol = gmm(0.36908);
 alpha_multi = sol.alpha;
 beta_multi = sol.beta;
-ds_unit = sol.ds;
+ds_multi = sol.ds;
 
 
 %% Analysis
-% market shares of bundles
+% report of parameters with standard errors
+% IV regressions for unit-demand, optimal nu, and nu=1
+ds_unit = gmm(-10000).ds;
+df_res = readmatrix('int/res_ds.csv');
+ds_opt = df_res(2:2218, df_res(1, :) == 0.36908);
+ds_nu0 = df_res(2:2218, 1);
 
+% IV regressions and se
+[coef_unit, se_unit] = tsls(ds_unit, df(:, 5:10), iv);
+[coef_opt, se_opt] = tsls(ds_opt, df(:, 5:10), iv);
+[coef_nu0, se_nu0] = tsls(ds_nu0, df(:, 5:10), iv);
 
